@@ -35,3 +35,12 @@ def questao_6(datapath):
     for i, j in codigos_estados.items():
         sexo_masculino_por_estado.rename(index = {i: j}, inplace = True)
     return sexo_masculino_por_estado.to_dict()
+
+
+
+def questao_8(datapath):
+    tabela = pd.read_parquet(datapath)
+    tabela["DT_NOTIFICACAO"] = pd.to_datetime(tabela["DT_NOTIFIC"])
+    tabela["DT_SINTOMAS"] = pd.to_datetime(tabela["DT_SIN_PRI"])
+    tabela["ATRASO_NOT"] = tabela["DT_NOTIFICACAO"] - tabela["DT_SINTOMAS"]
+    return tabela
