@@ -20,7 +20,6 @@ def questão_3(datapath):
     tupla = tuple(maior_quantidade[0])
     return casos_por_sexo, maior_quantidade
 
-
 def questao_4(datapath):
     tabela = pd.read_csv(datapath)
     return tabela["IDADE"].mean()
