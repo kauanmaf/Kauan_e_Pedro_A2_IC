@@ -9,3 +9,12 @@ def questao_1(datapath):
     tamanho = len(tabela.index)
     return tamanho
 
+def questao_2(datapath):
+    tabela = pd.read_csv(datapath)
+    return tabela.value_counts("ID_MUNICIP")
+
+
+
+def questao_4(datapath):
+    tabela = pd.read_csv(datapath)
+    return tabela["IDADE"].mean()
