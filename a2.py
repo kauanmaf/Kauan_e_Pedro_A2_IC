@@ -13,6 +13,12 @@ def questao_2(datapath):
     tabela = pd.read_csv(datapath)
     return tabela.value_counts("ID_MUNICIP")
 
+def questão_3(datapath):
+    tabela = pd.read_csv(datapath)
+    casos_por_sexo = dict(tabela["CS_SEXO"].value_counts())
+    maior_quantidade = list(casos_por_sexo.keys())
+    tupla = tuple(maior_quantidade[0])
+    return casos_por_sexo, maior_quantidade
 
 
 def questao_4(datapath):
