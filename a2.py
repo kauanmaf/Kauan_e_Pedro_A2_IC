@@ -41,7 +41,9 @@ def questao_6(datapath):
         sexo_masculino_por_estado.rename(index = {i: j}, inplace = True)
     return sexo_masculino_por_estado.to_dict()
 
-
+def questao_7(datapath):
+    tabela = pd.read_csv(datapath)
+    
 
 def questao_8(datapath):
     tabela = pd.read_parquet(datapath)
