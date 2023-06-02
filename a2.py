@@ -15,8 +15,8 @@ def questao_2(datapath = DATA):
     tabela = pd.read_parquet(datapath)
     return tabela.value_counts("ID_MUNICIP")
 
-def questão_3(datapath):
-    tabela = pd.read_csv(datapath)
+def questão_3(datapath = DATA):
+    tabela = pd.read_parquet(datapath)
     casos_por_sexo = dict(tabela["CS_SEXO"].value_counts())
     maior_quantidade = list(casos_por_sexo.keys())
     tupla = tuple(maior_quantidade[0])
@@ -43,8 +43,8 @@ def questao_6(datapath = DATA):
         sexo_masculino_por_estado.rename(index = {codigo: sigla}, inplace = True)
     return sexo_masculino_por_estado.to_dict()
 
-def questao_7(datapath):
-    tabela = pd.read_csv(datapath)
+def questao_7(datapath = DATA):
+    tabela = pd.read_parquet(datapath)
     mun_por_est = {31 : 853, 35 : 645, 43 : 497, 29 : 417, 41 : 399, 42 : 295, 52 : 246, 22 : 224, 25 : 223, 21: 217, 26 : 184, 23 : 184, 24 : 167, 15 : 144, 51 : 141, 17 : 139, 27 : 102, 33 : 92, 50 : 79, 32 : 78, 28 : 75, 13 : 62,11 : 52, 12 : 22, 16 : 16, 14 : 15}
     codigo_estados = {35: ' SP', 41: ' PR', 42: ' SC', 43: ' RS', 50: ' MS', 11: ' RO', 12: ' AC', 13: ' AM',14: ' RR', 15: ' PA', 16: ' AP', 17: ' TO', 21: ' MA', 24: ' RN', 25: ' PB', 26: ' PE', 27: ' AL', 28: ' SE', 29: ' BA', 31: ' MG', 33: ' RJ', 51: ' MT', 52: ' GO', 53: ' DF', 22: ' PI', 23: ' CE', 32: ' ES'}
 
