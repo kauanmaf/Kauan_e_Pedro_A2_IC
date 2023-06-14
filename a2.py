@@ -22,7 +22,7 @@ def questao_3(datapath = DATA):
     casos_por_sexo = dict(tabela["CS_SEXO"].value_counts())
     maior_quantidade = list(casos_por_sexo.keys())
     tupla = tuple(maior_quantidade[0])
-    return casos_por_sexo, maior_quantidade
+    return casos_por_sexo, tupla
 
 def questao_4(datapath = DATA):
     tabela = pd.read_parquet(datapath)
@@ -55,7 +55,7 @@ def questao_7(datapath = DATA):
     tabela_auxiliar["Porcentagem"] = (tabela_auxiliar["Quantidade de casos"]*100/tabela_auxiliar["Quantidade de Cidades"]).round(2)
     tabela_auxiliar["UF"] = tabela_auxiliar["COD"].map(codigos_estados)
     dicionario = dict(zip(tabela_auxiliar["UF"], tabela_auxiliar["Porcentagem"]))
-    return dicionario 
+    return tabela_auxiliar
 
 def questao_8(datapath = DATA):
     tabela = pd.read_parquet(datapath)
@@ -64,4 +64,4 @@ def questao_8(datapath = DATA):
     tabela["ATRASO_NOT"] = tabela["DT_NOTIFICACAO"] - tabela["DT_SINTOMAS"]
     return tabela
 
-print(questao_3())
+print(questao_5())
