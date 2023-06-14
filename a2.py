@@ -9,7 +9,6 @@ DATA = "esquistossomose.parquet"
 
 def questao_1(datapath = DATA):
     tabela = pd.read_parquet(datapath)
-    # Procura o comprimento do index, que é a quantidade de casos notificados
     tamanho = len(tabela.index)
     return tamanho
 
@@ -19,13 +18,9 @@ def questao_2(datapath = DATA):
 
 def questao_3(datapath = DATA):
     tabela = pd.read_parquet(datapath)
-    # Criando um dicionário com os sexos e a quantidade de ocorrências de homem e mulher
     casos_por_sexo = dict(tabela["CS_SEXO"].value_counts())
-    # Criando lista com as quantidades de casos
     lista_com_casos = list(casos_por_sexo.keys())
-    # Pegando o maior elemento (primeiro elemento)
     maior_quantidade = lista_com_casos[0]
-    #Retornando o sexo que aparece em maior quantidade, bem como a frequência
     return maior_quantidade, casos_por_sexo
 
 def questao_4(datapath = DATA):
