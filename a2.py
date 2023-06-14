@@ -9,6 +9,7 @@ DATA = "esquistossomose.parquet"
 
 def questao_1(datapath = DATA):
     tabela = pd.read_parquet(datapath)
+    # Procura o comprimento do index, que é a quantidade de casos notificados
     tamanho = len(tabela.index)
     return tamanho
 
@@ -18,10 +19,14 @@ def questao_2(datapath = DATA):
 
 def questao_3(datapath = DATA):
     tabela = pd.read_parquet(datapath)
+    # Criando um dicionário com os sexos e a quantidade de ocorrências de homem e mulher
     casos_por_sexo = dict(tabela["CS_SEXO"].value_counts())
-    maior_quantidade = list(casos_por_sexo.keys())
-    tupla = maior_quantidade[0]
-    return tupla, casos_por_sexo
+    # Criando lista com as quantidades de casos
+    lista_com_casos = list(casos_por_sexo.keys())
+    # Pegando o maior elemento (primeiro elemento)
+    maior_quantidade = lista_com_casos[0]
+    #Retornando o sexo que aparece em maior quantidade, bem como a frequência
+    return maior_quantidade, casos_por_sexo
 
 def questao_4(datapath = DATA):
     tabela = pd.read_parquet(datapath)
@@ -46,9 +51,11 @@ def questao_6(datapath = DATA):
 
 def questao_7(datapath = DATA):
     tabela = pd.read_parquet(datapath)
+    # Dicionário com o código do estado a quantidade de municípios nele
     mun_por_est = {31 : 853, 35 : 645, 43 : 497, 29 : 417, 41 : 399, 42 : 295, 52 : 246, 22 : 224, 25 : 223, 21: 217, 26 : 184, 23 : 184, 24 : 167, 15 : 144, 51 : 141, 17 : 139, 27 : 102, 33 : 92, 50 : 79, 32 : 78, 28 : 75, 13 : 62,11 : 52, 12 : 22, 16 : 16, 14 : 15}
-
+    # Agrupando os estados por estado e contando cada município uma única vez
     casos_por_estado = tabela.groupby('SG_UF_NOT')['ID_MUNICIP'].nunique()
+    # C
     casos_por_estado.index = pd.to_numeric(casos_por_estado.index)
     tabela_auxiliar = pd.DataFrame({"COD": mun_por_est.keys(), "Quantidade de Cidades": mun_por_est.values()})
     tabela_auxiliar["Quantidade de casos"] = tabela_auxiliar["COD"].map(casos_por_estado).fillna(0)
@@ -64,31 +71,17 @@ def questao_8(datapath = DATA):
     tabela["ATRASO_NOT"] = tabela["DT_NOTIFICACAO"] - tabela["DT_SINTOMAS"]
     return tabela[["DT_NOTIFICACAO", "DT_SINTOMAS", "ATRASO_NOT"]]
 
-def questão_9(datapath = DATA):
-    tabela = pd.read_parquet("esquistossomose.parquet")
+def questao_9(datapath = DATA):
+    tabela = pd.read_parquet(datapath)
     #criando as colunas com as datas
     tabela["DT_NOTIFICACAO"] = pd.to_datetime(tabela["DT_NOTIFIC"])
     tabela["DT_SINTOMAS"] = pd.to_datetime(tabela["DT_SIN_PRI"])
     tabela["ATRASO_NOT"] = tabela["DT_NOTIFICACAO"] - tabela["DT_SINTOMAS"]
+    tabela["ATRASO_NOT"] = tabela["ATRASO_NOT"].dt.days
     #criando o Dataframe com a media e o desvio padrão
     media_atraso = tabela.groupby("SG_UF_NOT")["ATRASO_NOT"].agg(["mean", "std"])
     #colocando o index como número para funcionar
     media_atraso.index = pd.to_numeric(media_atraso.index)
-    media_atraso["UF"] = media_atraso.index.map(codigos_estados)
+    media_atraso["UF"] = media_atraso.index.map(codigo_estados)
     resposta = dict(zip(media_atraso["UF"], zip(media_atraso["mean"], media_atraso["std"])))
     return resposta
-
-def questao_10(datapath = DATA):
-    atraso = pd.read_parquet(datapath)
-    atraso["DT_NOTIFICACAO"] = pd.to_datetime(atraso["DT_NOTIFIC"])
-    atraso["DT_SINTOMAS"] = pd.to_datetime(atraso["DT_SIN_PRI"])
-    atraso["ATRASO_NOT"] = atraso["DT_NOTIFICACAO"] - atraso["DT_SINTOMAS"]
-    atraso["ATRASO_NOT"] = atraso["ATRASO_NOT"].dt.days
-    atraso_por_municipio = pd.DataFrame(atraso.groupby("ID_MUNICIP")["ATRASO_NOT"].agg(["count", "mean"]))
-
-    plt.scatter(atraso_por_municipio["count"], atraso_por_municipio["mean"])
-    plt.xscale("log")
-    plt.yscale("log")
-    plt.show()
-
-    return atraso.groupby("ID_MUNICIP")["ATRASO_NOT"].mean()
