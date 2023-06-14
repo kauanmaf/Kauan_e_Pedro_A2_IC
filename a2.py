@@ -73,10 +73,8 @@ def questao_9(datapath = DATA):
     tabela["DT_SINTOMAS"] = pd.to_datetime(tabela["DT_SIN_PRI"])
     tabela["ATRASO_NOT"] = tabela["DT_NOTIFICACAO"] - tabela["DT_SINTOMAS"]
     tabela["ATRASO_NOT"] = tabela["ATRASO_NOT"].dt.days
-    #criando o Dataframe com a media e o desvio padrão
     media_atraso = tabela.groupby("SG_UF_NOT")["ATRASO_NOT"].agg(["mean", "std"])
-    #colocando o index como número para funcionar
     media_atraso.index = pd.to_numeric(media_atraso.index)
     media_atraso["UF"] = media_atraso.index.map(codigo_estados)
-    resposta = dict(zip(media_atraso["UF"], zip(media_atraso["mean"], media_atraso["std"])))
+    resposta = dict(zip(media_atraso["UF"], zip(media_atraso["mean"],round(2), media_atraso["std"].round(2))))
     return resposta
