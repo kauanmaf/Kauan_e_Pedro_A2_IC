@@ -64,5 +64,3 @@ def questao_8(datapath = DATA):
     tabela["DT_SINTOMAS"] = pd.to_datetime(tabela["DT_SIN_PRI"])
     tabela["ATRASO_NOT"] = tabela["DT_NOTIFICACAO"] - tabela["DT_SINTOMAS"]
     return tabela[["DT_NOTIFICACAO", "DT_SINTOMAS", "ATRASO_NOT"]]
-
-print(questao_5())
