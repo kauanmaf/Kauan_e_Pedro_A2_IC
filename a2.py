@@ -21,8 +21,8 @@ def questao_3(datapath = DATA):
     tabela = pd.read_parquet(datapath)
     casos_por_sexo = dict(tabela["CS_SEXO"].value_counts())
     maior_quantidade = list(casos_por_sexo.keys())
-    tupla = tuple(maior_quantidade[0])
-    return casos_por_sexo, tupla
+    tupla = maior_quantidade[0]
+    return tupla, casos_por_sexo
 
 def questao_4(datapath = DATA):
     tabela = pd.read_parquet(datapath)
@@ -62,6 +62,6 @@ def questao_8(datapath = DATA):
     tabela["DT_NOTIFICACAO"] = pd.to_datetime(tabela["DT_NOTIFIC"])
     tabela["DT_SINTOMAS"] = pd.to_datetime(tabela["DT_SIN_PRI"])
     tabela["ATRASO_NOT"] = tabela["DT_NOTIFICACAO"] - tabela["DT_SINTOMAS"]
-    return tabela
+    return tabela[["DT_NOTIFICACAO", "DT_SINTOMAS", "ATRASO_NOT"]]
 
-print(questao_5())
+print(questao_8())
