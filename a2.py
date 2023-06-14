@@ -51,8 +51,9 @@ def questao_7(datapath = DATA):
     casos_por_estado.index = pd.to_numeric(casos_por_estado.index)
     tabela_auxiliar = pd.DataFrame({"COD": mun_por_est.keys(), "Quantidade de Cidades": mun_por_est.values()})
     tabela_auxiliar["Quantidade de casos"] = tabela_auxiliar["COD"].map(casos_por_estado).fillna(0)
-    tabela_auxiliar["Porcentagem"] = (tabela_auxiliar["Quantidade de casos"]*100/tabela_auxiliar["Quantidade de Cidades"]).round(2)
+    tabela_auxiliar["Porcentagem"] = (tabela_auxiliar["Quantidade de casos"]/tabela_auxiliar["Quantidade de Cidades"]).round(4)
     tabela_auxiliar["UF"] = tabela_auxiliar["COD"].map(codigos_estados)
+    tabela_auxiliar.sort_values(by="Porcentagem", inplace= True, ascending=False)
     dicionario = dict(zip(tabela_auxiliar["UF"], tabela_auxiliar["Porcentagem"]))
     return dicionario
 
@@ -73,7 +74,7 @@ def questao_9(datapath = DATA):
     media_atraso.index = pd.to_numeric(media_atraso.index)
     media_atraso["UF"] = media_atraso.index.map(codigos_estados)
     media_atraso.sort_values(by='mean', ascending=False, inplace=True)
-    resposta = dict(zip(media_atraso["UF"], zip(media_atraso["mean"], media_atraso["std"])))
+    resposta = dict(zip(media_atraso["UF"], zip(media_atraso["mean"].round(2), media_atraso["std"].round(2))))
     return resposta
 
 def questao_10(datapath = DATA):
@@ -84,9 +85,16 @@ def questao_10(datapath = DATA):
     atraso["ATRASO_NOT"] = atraso["ATRASO_NOT"].dt.days
     atraso_por_municipio = pd.DataFrame(atraso.groupby("ID_MUNICIP")["ATRASO_NOT"].agg(["count", "mean"]))
 
-    plt.scatter(atraso_por_municipio["mean"], atraso_por_municipio["count"])
+    plt.scatter(atraso_por_municipio["count"], atraso_por_municipio["mean"])
     plt.xscale("log")
     plt.yscale("log")
+    plt.xlabel("Contagem de casos")
+    plt.ylabel("Média de atraso de notificação (dias)")
     plt.show()
 
-    return atraso.groupby("ID_MUNICIP")["ATRASO_NOT"].mean()
+    return atraso.groupby("ID_MUNICIP")["ATRASO_NOT"].mean().round(2)
+
+print(questao_10())
+
+
+
