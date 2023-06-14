@@ -75,6 +75,21 @@ def questao_9(datapath = DATA):
     tabela["ATRASO_NOT"] = tabela["ATRASO_NOT"].dt.days
     media_atraso = tabela.groupby("SG_UF_NOT")["ATRASO_NOT"].agg(["mean", "std"])
     media_atraso.index = pd.to_numeric(media_atraso.index)
-    media_atraso["UF"] = media_atraso.index.map(codigo_estados)
-    resposta = dict(zip(media_atraso["UF"], zip(media_atraso["mean"],round(2), media_atraso["std"].round(2))))
+    media_atraso["UF"] = media_atraso.index.map(codigos_estados)
+    resposta = dict(zip(media_atraso["UF"], zip(media_atraso["mean"], media_atraso["std"])))
     return resposta
+
+def questao_10(datapath = DATA):
+    atraso = pd.read_parquet(datapath)
+    atraso["DT_NOTIFICACAO"] = pd.to_datetime(atraso["DT_NOTIFIC"])
+    atraso["DT_SINTOMAS"] = pd.to_datetime(atraso["DT_SIN_PRI"])
+    atraso["ATRASO_NOT"] = atraso["DT_NOTIFICACAO"] - atraso["DT_SINTOMAS"]
+    atraso["ATRASO_NOT"] = atraso["ATRASO_NOT"].dt.days
+    atraso_por_municipio = pd.DataFrame(atraso.groupby("ID_MUNICIP")["ATRASO_NOT"].agg(["count", "mean"]))
+
+    plt.scatter(atraso_por_municipio["mean"], atraso_por_municipio["count"])
+    plt.xscale("log")
+    plt.yscale("log")
+    plt.show()
+
+    return atraso.groupby("ID_MUNICIP")["ATRASO_NOT"].mean()
