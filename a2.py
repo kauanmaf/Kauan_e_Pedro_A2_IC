@@ -72,6 +72,7 @@ def questao_9(datapath = DATA):
     media_atraso = tabela.groupby("SG_UF_NOT")["ATRASO_NOT"].agg(["mean", "std"])
     media_atraso.index = pd.to_numeric(media_atraso.index)
     media_atraso["UF"] = media_atraso.index.map(codigos_estados)
+    media_atraso.sort_values(by='mean', ascending=False, inplace=True)
     resposta = dict(zip(media_atraso["UF"], zip(media_atraso["mean"], media_atraso["std"])))
     return resposta
 
