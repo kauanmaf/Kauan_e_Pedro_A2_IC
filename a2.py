@@ -46,11 +46,8 @@ def questao_6(datapath = DATA):
 
 def questao_7(datapath = DATA):
     tabela = pd.read_parquet(datapath)
-    # Dicionário com o código do estado a quantidade de municípios nele
     mun_por_est = {31 : 853, 35 : 645, 43 : 497, 29 : 417, 41 : 399, 42 : 295, 52 : 246, 22 : 224, 25 : 223, 21: 217, 26 : 184, 23 : 184, 24 : 167, 15 : 144, 51 : 141, 17 : 139, 27 : 102, 33 : 92, 50 : 79, 32 : 78, 28 : 75, 13 : 62,11 : 52, 12 : 22, 16 : 16, 14 : 15}
-    # Agrupando os estados por estado e contando cada município uma única vez
     casos_por_estado = tabela.groupby('SG_UF_NOT')['ID_MUNICIP'].nunique()
-    # C
     casos_por_estado.index = pd.to_numeric(casos_por_estado.index)
     tabela_auxiliar = pd.DataFrame({"COD": mun_por_est.keys(), "Quantidade de Cidades": mun_por_est.values()})
     tabela_auxiliar["Quantidade de casos"] = tabela_auxiliar["COD"].map(casos_por_estado).fillna(0)
@@ -68,7 +65,6 @@ def questao_8(datapath = DATA):
 
 def questao_9(datapath = DATA):
     tabela = pd.read_parquet(datapath)
-    #criando as colunas com as datas
     tabela["DT_NOTIFICACAO"] = pd.to_datetime(tabela["DT_NOTIFIC"])
     tabela["DT_SINTOMAS"] = pd.to_datetime(tabela["DT_SIN_PRI"])
     tabela["ATRASO_NOT"] = tabela["DT_NOTIFICACAO"] - tabela["DT_SINTOMAS"]
