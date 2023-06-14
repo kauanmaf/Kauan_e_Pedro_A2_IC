@@ -65,4 +65,16 @@ def questao_8(datapath = DATA):
     tabela["ATRASO_NOT"] = tabela["DT_NOTIFICACAO"] - tabela["DT_SINTOMAS"]
     return tabela[["DT_NOTIFICACAO", "DT_SINTOMAS", "ATRASO_NOT"]]
 
-print(questao_5())
+def questão_9(datapath = DATA):
+    tabela = pd.read_parquet("esquistossomose.parquet")
+    #criando as colunas com as datas
+    tabela["DT_NOTIFICACAO"] = pd.to_datetime(tabela["DT_NOTIFIC"])
+    tabela["DT_SINTOMAS"] = pd.to_datetime(tabela["DT_SIN_PRI"])
+    tabela["ATRASO_NOT"] = tabela["DT_NOTIFICACAO"] - tabela["DT_SINTOMAS"]
+    #criando o Dataframe com a media e o desvio padrão
+    media_atraso = tabela.groupby("SG_UF_NOT")["ATRASO_NOT"].agg(["mean", "std"])
+    #colocando o index como número para funcionar
+    media_atraso.index = pd.to_numeric(media_atraso.index)
+    media_atraso["UF"] = media_atraso.index.map(codigo_estados)
+    resposta = dict(zip(media_atraso["UF"], zip(media_atraso["mean"], media_atraso["std"])))
+    return resposta
