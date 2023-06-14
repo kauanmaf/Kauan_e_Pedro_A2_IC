@@ -2,7 +2,7 @@ AUTORES = ["Kauan Mariani Ferreira", "Pedro Henrique Coterli"]
 
 import pandas as pd
 import numpy as np
-# import matplotlib as plt
+import matplotlib.pyplot as plt
 
 codigos_estados = {35: 'SP', 41: 'PR', 42: 'SC', 43: 'RS', 50: 'MS', 11: 'RO', 12: 'AC', 13: 'AM', 14: 'RR', 15: 'PA', 16: 'AP', 17: 'TO', 21: 'MA', 24: 'RN', 25: 'PB', 26: 'PE', 27: 'AL', 28: 'SE', 29: 'BA', 31: 'MG', 33: 'RJ', 51: 'MT', 52: 'GO', 53: 'DF', 22: 'PI', 23: 'CE', 32: 'ES'}
 
@@ -75,6 +75,21 @@ def questão_9(datapath = DATA):
     media_atraso = tabela.groupby("SG_UF_NOT")["ATRASO_NOT"].agg(["mean", "std"])
     #colocando o index como número para funcionar
     media_atraso.index = pd.to_numeric(media_atraso.index)
-    media_atraso["UF"] = media_atraso.index.map(codigo_estados)
+    media_atraso["UF"] = media_atraso.index.map(codigos_estados)
     resposta = dict(zip(media_atraso["UF"], zip(media_atraso["mean"], media_atraso["std"])))
     return resposta
+
+def questao_10(datapath = DATA):
+    atraso = pd.read_parquet(datapath)
+    atraso["DT_NOTIFICACAO"] = pd.to_datetime(atraso["DT_NOTIFIC"])
+    atraso["DT_SINTOMAS"] = pd.to_datetime(atraso["DT_SIN_PRI"])
+    atraso["ATRASO_NOT"] = atraso["DT_NOTIFICACAO"] - atraso["DT_SINTOMAS"]
+    atraso["ATRASO_NOT"] = atraso["ATRASO_NOT"].dt.days
+    atraso_por_municipio = pd.DataFrame(atraso.groupby("ID_MUNICIP")["ATRASO_NOT"].agg(["count", "mean"]))
+
+    plt.scatter(atraso_por_municipio["count"], atraso_por_municipio["mean"])
+    plt.xscale("log")
+    plt.yscale("log")
+    plt.show()
+
+    return atraso.groupby("ID_MUNICIP")["ATRASO_NOT"].mean()
