@@ -93,6 +93,3 @@ def questao_10(datapath = DATA):
     plt.show()
 
     return atraso.groupby("ID_MUNICIP")["ATRASO_NOT"].mean().round(2)
-
-
-print(questao_10())
